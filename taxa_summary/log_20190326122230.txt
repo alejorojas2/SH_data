@@ -1,0 +1,79 @@
+Logging started at 12:22:30 on 26 Mar 2019
+QIIME version: 1.9.1
+
+qiime_config values:
+pick_otus_reference_seqs_fp	/dscrhome/rm259/miniconda2/envs/qiime/lib/python2.7/site-packages/qiime_default_reference/gg_13_8_otus/rep_set/97_otus.fasta
+sc_queue	all.q
+pynast_template_alignment_fp	/dscrhome/rm259/miniconda2/envs/qiime/lib/python2.7/site-packages/qiime_default_reference/gg_13_8_otus/rep_set_aligned/85_otus.pynast.fasta
+cluster_jobs_fp	start_parallel_jobs.py
+assign_taxonomy_reference_seqs_fp	/dscrhome/rm259/miniconda2/envs/qiime/lib/python2.7/site-packages/qiime_default_reference/gg_13_8_otus/rep_set/97_otus.fasta
+torque_queue	friendlyq
+jobs_to_start	1
+denoiser_min_per_core	50
+assign_taxonomy_id_to_taxonomy_fp	/dscrhome/rm259/miniconda2/envs/qiime/lib/python2.7/site-packages/qiime_default_reference/gg_13_8_otus/taxonomy/97_otu_taxonomy.txt
+temp_dir	/tmp/
+blastall_fp	blastall
+seconds_to_sleep	1
+
+parameter file values:
+
+Input file md5 sums:
+otu_table.biom: 65e198714b761c2296a4fdfe0d0f9823
+Analysis/mapping_file_ITS_R1_corrected.txt: 883c85c5f52abb1bed74e2e145fd1ba6
+
+Executing commands.
+
+# Summarize Taxonomy command 
+summarize_taxa.py -i otu_table.biom -o SHtest_taxa_summary 
+
+Stdout:
+
+Stderr:
+
+# Plot Taxonomy Summary command 
+plot_taxa_summary.py -i SHtest_taxa_summary/otu_table_L2.txt,SHtest_taxa_summary/otu_table_L3.txt,SHtest_taxa_summary/otu_table_L4.txt,SHtest_taxa_summary/otu_table_L5.txt,SHtest_taxa_summary/otu_table_L6.txt -o SHtest_taxa_summary/taxa_summary_plots/ 
+
+
+
+*** ERROR RAISED DURING STEP: Plot Taxonomy Summary
+Command run was:
+ plot_taxa_summary.py -i SHtest_taxa_summary/otu_table_L2.txt,SHtest_taxa_summary/otu_table_L3.txt,SHtest_taxa_summary/otu_table_L4.txt,SHtest_taxa_summary/otu_table_L5.txt,SHtest_taxa_summary/otu_table_L6.txt -o SHtest_taxa_summary/taxa_summary_plots/ 
+Command returned exit status: 1
+Stdout:
+
+Stderr
+Traceback (most recent call last):
+  File "/dscrhome/rm259/miniconda2/envs/qiime/bin/plot_taxa_summary.py", line 4, in <module>
+    __import__('pkg_resources').run_script('qiime==1.9.1', 'plot_taxa_summary.py')
+  File "/dscrhome/rm259/miniconda2/envs/qiime/lib/python2.7/site-packages/pkg_resources/__init__.py", line 666, in run_script
+    self.require(requires)[0].run_script(script_name, ns)
+  File "/dscrhome/rm259/miniconda2/envs/qiime/lib/python2.7/site-packages/pkg_resources/__init__.py", line 1446, in run_script
+    exec(code, namespace, namespace)
+  File "/hpchome/vilgalyslab/rm259/miniconda2/envs/qiime/lib/python2.7/site-packages/qiime-1.9.1-py2.7.egg-info/scripts/plot_taxa_summary.py", line 278, in <module>
+    main()
+  File "/hpchome/vilgalyslab/rm259/miniconda2/envs/qiime/lib/python2.7/site-packages/qiime-1.9.1-py2.7.egg-info/scripts/plot_taxa_summary.py", line 274, in main
+    resize_nth_label, label_type, include_html_legend)
+  File "/dscrhome/rm259/miniconda2/envs/qiime/lib/python2.7/site-packages/qiime/plot_taxa_summary.py", line 1138, in make_all_charts
+    resize_nth_label, label_type, include_html_legend))
+  File "/dscrhome/rm259/miniconda2/envs/qiime/lib/python2.7/site-packages/qiime/plot_taxa_summary.py", line 1073, in get_counts
+    label_type, include_html_legend))
+  File "/dscrhome/rm259/miniconda2/envs/qiime/lib/python2.7/site-packages/qiime/plot_taxa_summary.py", line 861, in make_HTML_table
+    props={'title': title})
+  File "/dscrhome/rm259/miniconda2/envs/qiime/lib/python2.7/site-packages/qiime/plot_taxa_summary.py", line 466, in make_area_bar_chart
+    fig = figure(figsize=(plot_width, plot_height))
+  File "/dscrhome/rm259/miniconda2/envs/qiime/lib/python2.7/site-packages/matplotlib/pyplot.py", line 435, in figure
+    **kwargs)
+  File "/dscrhome/rm259/miniconda2/envs/qiime/lib/python2.7/site-packages/matplotlib/backends/backend_qt4agg.py", line 47, in new_figure_manager
+    return new_figure_manager_given_figure(num, thisFig)
+  File "/dscrhome/rm259/miniconda2/envs/qiime/lib/python2.7/site-packages/matplotlib/backends/backend_qt4agg.py", line 54, in new_figure_manager_given_figure
+    canvas = FigureCanvasQTAgg(figure)
+  File "/dscrhome/rm259/miniconda2/envs/qiime/lib/python2.7/site-packages/matplotlib/backends/backend_qt4agg.py", line 72, in __init__
+    FigureCanvasQT.__init__(self, figure)
+  File "/dscrhome/rm259/miniconda2/envs/qiime/lib/python2.7/site-packages/matplotlib/backends/backend_qt4.py", line 68, in __init__
+    _create_qApp()
+  File "/dscrhome/rm259/miniconda2/envs/qiime/lib/python2.7/site-packages/matplotlib/backends/backend_qt5.py", line 138, in _create_qApp
+    raise RuntimeError('Invalid DISPLAY variable')
+RuntimeError: Invalid DISPLAY variable
+
+
+Logging stopped at 12:23:57 on 26 Mar 2019
