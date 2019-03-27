@@ -61,7 +61,7 @@ assign_taxonomy.py -i combined_no_chimeras.fasta_rep_set.fasta -m blast -t ~/sh_
 
 
 #make otu table
-make_otu_table.py -i usearch61_picked_otus/combined_seqs_otus.txt -t blast_assigned_taxonomy/combined_seqs.fna_rep_set_tax_assignments.log -o otu_table.biom
+make_otu_table.py -i usearch61_picked_otus/combined_seqs_otus.txt -t blast_assigned_taxonomy/combined_seqs.fna_rep_set_tax_assignments.log -m mapping_file_corrected -o otu_table.biom
 
 #summarize taxa through plots
 summarize_taxa_through_plots.py -i otu_table.biom -o SHtest_taxa_summary -m mapping_file_corrected
