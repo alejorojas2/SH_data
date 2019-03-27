@@ -1,0 +1,87 @@
+---
+title: "SH_Graph"
+output: html_document
+---
+
+
+# Importing data and pre-processing
+
+```{r, warning=FALSE, error=FALSE, message=FALSE}
+library(phyloseq)
+library(ggplot2)
+library(tidyverse)
+library(RColorBrewer)
+library(cowplot)
+library(metacoder)
+SH_ITS_data0 <- import_biom(BIOMfilename = "otu_table.biom")
+SH_ITS_data0
+sam.data <- read.csv (file = "mapping_file_ITS_R1_corrected.csv", row.names = 1, header = TRUE)
+sample_data (SH_ITS_data0) <- sam.data
+```
+
+## Checking sequencing depth
+
+```{r}
+# Make a data frame with a column for the read counts of each sample
+sample_sum_df <- data.frame(sum = sample_sums(SH_ITS_data0))
+# Histogram of sample read counts
+ggplot(sample_sum_df, aes(x = sum)) + 
+  geom_histogram(color = "black", fill = "indianred", binwidth = 2500) +
+  ggtitle("Distribution of sample sequencing depth") + 
+  xlab("Read counts") +
+  theme_gray() + theme(axis.title.y = element_blank())
+```
+
+## Standardizing by sequencing depth
+
+```{r}
+#Standardize abundances to the median sequencing depth
+total <- median(sample_sums(SH_ITS_data0))
+standf <- function(x, t=total) round(t * (x/sum(x)))
+SH_ITS_data0.std <- transform_sample_counts(SH_ITS_data0, standf)
+```
+
+## Filtering "no hits"
+
+```{r}
+#Renaming taxonomy levels on tax_table
+colnames(tax_table(SH_ITS_data0.std)) <- c("Kingdom", "Phylum", "Class","Order", "Family", "Genus", "Species")
+#Filtering no hit at Kingdom level
+SH_ITS_data <- subset_taxa(SH_ITS_data0.std, Kingdom != "No blast hit")
+```
+
+# Taxa abudance at different rank levels
+
+```{r, fig.width= 12, fig.height=6, fig.align='center'}
+#summarizing by tax rank
+SH_ITS.phylum <- tax_glom(SH_ITS_data, "Phylum")
+plot_bar(SH_ITS_data, fill = "Phylum", x = "Group") + theme_gray()
+plot_bar(SH_ITS.phylum, fill = "Phylum", x = "Group") + theme_gray()
+#Plot by family
+SH_ITS.fam <- tax_glom(SH_ITS_data, "Family")
+plot_bar(SH_ITS.fam, fill = "Family", x = "Group") + theme_gray()
+```
+
+## Relative abudance of genus and class in BGM soil and root samples
+
+```{r, fig.width= 12, fig.height=6, fig.align='center'}
+TopNOTUs <- function(sample,N) {
+  names(sort(taxa_sums(sample), TRUE)[1:N])
+}
+#Creating data frame from phyloseq object
+top.SH_ITS <- TopNOTUs(SH_ITS_data, 50)
+SH_ITS.df <- prune_taxa(top.SH_ITS, SH_ITS_data) %>% psmelt()
+#Sumarize data by site 
+#test <- BGM.df %>% group_by(Genus) %>% summarise(sum(Abundance))
+#plot by relative abundance
+#Plot
+pal <- colorRampPalette((brewer.pal(10, "Paired")))
+SH_ITS.genus <- ggplot(data = SH_ITS.df, aes(Group, Abundance, fill = Genus)) +
+  geom_bar(stat = "identity", position = position_fill()) + coord_flip() +
+  scale_fill_manual(values = (rev(pal(24)))) + 
+  guides(fill = guide_legend(reverse = TRUE, ncol = 1, keyheight = 0.8)) +
+  theme(text = element_text(size = 15)) + theme_gray()
+
+SH_ITS.genus
+```
+
